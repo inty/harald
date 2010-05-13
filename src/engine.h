@@ -7,6 +7,7 @@ namespace Engine {
   class Object {
     public:
       virtual void draw() = 0;
+      virtual void key(int key) = 0;
   };
 
   typedef list<Object*> ObjectList;
@@ -23,6 +24,7 @@ namespace Engine {
       static void render();
       static void idle();
       static void timer(int time);
+      static void keyboard(int key, int x, int y);
 
       static ObjectList objects;
   };
@@ -41,6 +43,7 @@ namespace Engine {
     public:
       Player();
       void draw();
+      void key(int key);
   };
 
 }

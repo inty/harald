@@ -2,6 +2,7 @@
 #include "GL/glut.h"
 #include <iostream>
 
+using namespace std;
 using namespace Engine;
 
 ObjectList Window::objects;
@@ -17,6 +18,15 @@ Window::Window(int argc, char* argv[]) {
   glutDisplayFunc(&render);
   glutIdleFunc(&idle);
   glutTimerFunc(0,&timer,0);
+  glutSpecialFunc(&keyboard);
+}
+
+void Window::keyboard(int key, int x, int y) {
+  for(ObjectList::const_iterator iter = objects.begin(),
+    endIter = objects.end(); iter != endIter; ++iter) {
+    Object *object = *iter;
+    object->key(key);
+  }
 }
 
 void Window::run() {
@@ -72,3 +82,15 @@ void Player::draw() {
   glVertex2f(-2,-4);
   glEnd();
 }
+
+void Player::key(int key) {
+  switch(key) {
+    case GLUT_KEY_UP:
+    case GLUT_KEY_DOWN:
+    case GLUT_KEY_LEFT:
+    case GLUT_KEY_RIGHT:
+      glRotatef(100,0,0,1);
+      break;
+  }
+}
+
