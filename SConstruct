@@ -1,0 +1,1 @@
+Program('src/main.cpp')
