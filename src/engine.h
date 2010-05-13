@@ -34,16 +34,10 @@ namespace Engine {
       Base(int argc, char* argv[]);
 
       void run();
+      void add(Object* object);
 
     private:
       Window* window;
-  };
-
-  class Player : public Object {
-    public:
-      Player();
-      void draw();
-      void key(int key);
   };
 
 }

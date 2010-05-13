@@ -1,11 +1,14 @@
 #include <iostream>
-#include "engine.cpp"
+#include "game.h"
 
 using namespace std;
 using namespace Engine;
+using namespace Game;
 
 int main(int argc, char* argv[]) {
-  Base engine(argc, argv);
-  engine.run();
+  Base* engine = new Base(argc, argv);
+  Player* player = new Player();
+  engine->add(player);
+  engine->run();
   return 0;
 }
