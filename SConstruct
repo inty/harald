@@ -1,1 +1,1 @@
-Program('src/main.cpp')
+Program('src/main.cpp', LIBS = ['glut', 'GLU'])
