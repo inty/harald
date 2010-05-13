@@ -1,13 +1,30 @@
+#include <list>
+
+using namespace std;
 
 namespace Engine {
+
+  class Object {
+    public:
+      virtual void draw() = 0;
+  };
+
+  typedef list<Object*> ObjectList;
 
   class Window {
     public:
       Window(int argc, char* argv[]);
       void run();
 
+      void add(Object* object);
+
+    private:
       // needs to be static so we can send a function pointer to glut.. :/
       static void render();
+      static void idle();
+      static void timer(int time);
+
+      static ObjectList objects;
   };
 
   class Base {
@@ -18,6 +35,12 @@ namespace Engine {
 
     private:
       Window* window;
+  };
+
+  class Player : public Object {
+    public:
+      Player();
+      void draw();
   };
 
 }
