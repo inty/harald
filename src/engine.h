@@ -4,16 +4,27 @@ using namespace std;
 
 namespace Engine {
 
+  class Base;
+
   class Object {
     public:
+      Object(Base* engine);
+
       virtual void draw() = 0;
       virtual void key(int key) = 0;
+
+    protected:
+      Base* engine;
   };
 
   typedef list<Object*> ObjectList;
 
   class Window {
     public:
+      const static int WIDTH;
+      const static int HEIGHT;
+      const static char* NAME;
+
       Window(int argc, char* argv[]);
       void run();
 
@@ -35,6 +46,8 @@ namespace Engine {
 
       void run();
       void add(Object* object);
+
+      void loadImage(char* filename);
 
     private:
       Window* window;

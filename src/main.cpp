@@ -7,7 +7,7 @@ using namespace Game;
 
 int main(int argc, char* argv[]) {
   Base* engine = new Base(argc, argv);
-  Player* player = new Player();
+  Player* player = new Player(engine);
   engine->add(player);
   engine->run();
   return 0;

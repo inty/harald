@@ -2,28 +2,40 @@
 #include "GL/glut.h"
 
 using namespace Game;
+using namespace Engine;
 
-Player::Player() {
+Player::Player(Base* engine) : Object(engine) {
 
 }
 
 void Player::draw() {
-  glColor3f(1,0,0);
+  engine->loadImage("data/img/objects/player.png");
   glBegin(GL_QUADS);
-  glVertex2f(-4,-4);
-  glVertex2f(-4,-2);
-  glVertex2f(-2,-2);
-  glVertex2f(-2,-4);
+  glTexCoord2i(0, 0);
+  glVertex2i(0, 0);
+  glTexCoord2i(0, 1);
+  glVertex2i(0, 32);
+  glTexCoord2i(1, 1);
+  glVertex2i(32, 32);
+  glTexCoord2i(1, 0);
+  glVertex2i(32, 0);
   glEnd();
 }
 
 void Player::key(int key) {
   switch(key) {
     case GLUT_KEY_UP:
+      glTranslatef(0.0f,-2.0f,0.0f);
+      break;
     case GLUT_KEY_DOWN:
+      glTranslatef(0.0f,2.0f,0.0f);
+      break;
     case GLUT_KEY_LEFT:
+      glTranslatef(-2.0f,0.0f,0.0f);
+      break;
     case GLUT_KEY_RIGHT:
-      glRotatef(100,0,0,1);
+      glTranslatef(2.0f,0.0f,0.0f);
       break;
   }
 }
+
