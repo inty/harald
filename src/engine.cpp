@@ -51,7 +51,9 @@ void Object::setX(float x) {
 }
 
 void Object::drawQuad(int w, int h) {
+  glLoadIdentity();
   glTranslatef(getX() + 0.0f, getY() + 0.0f, 0.0f);
+  glRotatef(20.0f,1.0f,0.5f,0);
   glBegin(GL_QUADS);
     // Front
     glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.1f, -0.1f,  0.1f);
@@ -163,9 +165,6 @@ void Window::display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   float time = glutGet(GLUT_ELAPSED_TIME);
-
-  glLoadIdentity();
-  glRotatef(30.0f,1.0f,0.5f,0);
 
   for(ObjectList::const_iterator iter = objects.begin(),
     endIter = objects.end(); iter != endIter; ++iter) {
