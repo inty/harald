@@ -25,4 +25,15 @@ namespace Game {
     private:
       Texture* texture;
   };
+
+  class Grass : public Object {
+    public:
+      Grass(Base* engine);
+
+      void draw();
+      void key(int key);
+
+    private:
+      Texture* texture;
+  };
 }

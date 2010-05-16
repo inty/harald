@@ -50,3 +50,16 @@ void Tree::draw() {
 void Tree::key(int key) {
 }
 
+// GRASS
+
+Grass::Grass(Base* engine) : Object(engine) {
+  texture = engine->loadImage("data/img/objects/grass.png");
+}
+
+void Grass::draw() {
+  engine->bindTexture(texture);
+  draw2dQuad(engine->WIDTH, engine->HEIGHT);
+}
+
+void Grass::key(int key) {
+}

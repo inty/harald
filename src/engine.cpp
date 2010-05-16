@@ -4,9 +4,9 @@
 using namespace std;
 using namespace Engine;
 
-const int Window::WIDTH = 640;
-const int Window::HEIGHT = 480;
-const char* Window::NAME = "harald";
+const int Base::WIDTH = 640;
+const int Base::HEIGHT = 480;
+const char* Base::NAME = "harald";
 
 ObjectList Window::objects;
 
@@ -88,14 +88,42 @@ void Object::drawQuad(int w, int h) {
   glEnd();
 }
 
+void Object::draw2dQuad(int w, int h) {
+  glDisable(GL_DEPTH_TEST);
+  glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
+  glLoadIdentity();
+  glOrtho(0,engine->WIDTH,0,engine->HEIGHT,-1,1);
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
+  glLoadIdentity();
+
+  glBegin(GL_QUADS);
+  glTexCoord2i(0, 0);
+  glVertex2i(0, 0);
+  glTexCoord2i(0, 1);
+  glVertex2i(0, h);
+  glTexCoord2i(1, 1);
+  glVertex2i(w, h);
+  glTexCoord2i(1, 0);
+  glVertex2i(w, 0);
+  glEnd();
+
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glPopMatrix();
+  glEnable(GL_DEPTH_TEST);
+}
+
 // Window
 
-Window::Window(int argc, char* argv[]) {
+Window::Window(int argc, char* argv[], int width, int height, char* name) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
   glutInitWindowPosition(100,100);
-  glutInitWindowSize(WIDTH, HEIGHT);
-  glutCreateWindow(NAME);
+  glutInitWindowSize(width, height);
+  glutCreateWindow(name);
 
   // bind some callbacks
   glutDisplayFunc(&display);
@@ -118,7 +146,7 @@ Window::Window(int argc, char* argv[]) {
   glShadeModel(GL_SMOOTH);
   glDepthFunc(GL_LEQUAL);
 
-  glViewport(0, 0, WIDTH, HEIGHT);
+  glViewport(0, 0, width, height);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
@@ -129,6 +157,7 @@ Window::Window(int argc, char* argv[]) {
   glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmbient);
   glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiffuse);
   glLightfv(GL_LIGHT1, GL_POSITION, lightPos);
+
 }
 
 void Window::reshape(int w, int h) {
@@ -185,7 +214,7 @@ void Window::timer(int time) {
 // Base
 
 Base::Base(int argc, char* argv[]) {
-  window = new Window(argc, argv);
+  window = new Window(argc, argv, WIDTH, HEIGHT, (char*)NAME);
 }
 
 void Base::add(Object* object) {
@@ -216,8 +245,10 @@ Texture* Base::loadImage(char* filename) {
 }
 
 void Base::bindTexture(Texture* texture) {
+
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
   glTexImage2D(GL_TEXTURE_2D, 0, texture->getInternalFormat(), texture->getWidth(),
     texture->getHeight(), 0, texture->getFormat(), GL_UNSIGNED_BYTE,
     texture->getData());

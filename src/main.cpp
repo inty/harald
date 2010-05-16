@@ -7,10 +7,12 @@ using namespace Game;
 
 int main(int argc, char* argv[]) {
   Base* engine = new Base(argc, argv);
+  Grass* grass = new Grass(engine);
   Player* player = new Player(engine);
   Tree* tree = new Tree(engine);
-  engine->add(player);
+  engine->add(grass);
   engine->add(tree);
+  engine->add(player);
   engine->run();
   return 0;
 }

@@ -50,6 +50,7 @@ namespace Engine {
       void setY(float y);
 
       void drawQuad(int w, int h);
+      void draw2dQuad(int w, int h);
 
     private:
       float x;
@@ -61,13 +62,9 @@ namespace Engine {
 
   class Window {
     public:
-      const static int WIDTH;
-      const static int HEIGHT;
-      const static char* NAME;
+      Window(int argc, char* argv[], int width, int height, char* name);
 
-      Window(int argc, char* argv[]);
       void run();
-
       void add(Object* object);
 
     private:
@@ -83,6 +80,10 @@ namespace Engine {
 
   class Base {
     public:
+      const static int WIDTH;
+      const static int HEIGHT;
+      const static char* NAME;
+
       Base(int argc, char* argv[]);
 
       void run();
