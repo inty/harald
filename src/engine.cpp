@@ -24,19 +24,23 @@ Window::Window(int argc, char* argv[]) {
   glutInitWindowPosition(100,100);
   glutInitWindowSize(WIDTH, HEIGHT);
   glutCreateWindow(NAME);
-  glutDisplayFunc(&render);
-  glutIdleFunc(&render);
+  glutDisplayFunc(&display);
+  glutIdleFunc(&display);
   glutTimerFunc(0,&timer,0);
   glutSpecialFunc(&keyboard);
-  glViewport(0, 0, WIDTH, HEIGHT);
+  glutReshapeFunc(&reshape);
   glEnable(GL_TEXTURE_2D);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(0.0, WIDTH, HEIGHT, 0.0, 0.0, 100.0);
-  glMatrixMode(GL_MODELVIEW);
-  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-  glClearDepth(0.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glViewport(0, 0, WIDTH, HEIGHT);
+}
+
+void Window::reshape(int w, int h) {
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(0.0, w, h, 0.0, 0.0, 100.0);
+  glViewport(0, 0, w, h);
 }
 
 void Window::keyboard(int key, int x, int y) {
@@ -55,7 +59,7 @@ void Window::add(Object* object) {
   objects.push_back(object);
 }
 
-void Window::render() {
+void Window::display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   float time = glutGet(GLUT_ELAPSED_TIME);
