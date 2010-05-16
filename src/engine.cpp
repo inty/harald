@@ -27,7 +27,8 @@ Window::Window(int argc, char* argv[]) {
   glutDisplayFunc(&display);
   glutIdleFunc(&display);
   glutTimerFunc(0,&timer,0);
-  glutSpecialFunc(&keyboard);
+  glutKeyboardFunc(&keyboard);
+  glutSpecialFunc(&specialKeyboard);
   glutReshapeFunc(&reshape);
   glEnable(GL_TEXTURE_2D);
   glMatrixMode(GL_PROJECTION);
@@ -43,7 +44,15 @@ void Window::reshape(int w, int h) {
   glViewport(0, 0, w, h);
 }
 
-void Window::keyboard(int key, int x, int y) {
+void Window::keyboard(unsigned char key, int x, int y) {
+  switch(key) {
+    case 27:
+      exit(0);
+      break;
+  }
+}
+
+void Window::specialKeyboard(int key, int x, int y) {
   for(ObjectList::const_iterator iter = objects.begin(),
     endIter = objects.end(); iter != endIter; ++iter) {
     Object *object = *iter;
