@@ -20,12 +20,12 @@ Object::Object(Base* engine) {
 
 Window::Window(int argc, char* argv[]) {
   glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+  glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
   glutInitWindowPosition(100,100);
   glutInitWindowSize(WIDTH, HEIGHT);
   glutCreateWindow(NAME);
   glutDisplayFunc(&render);
-  glutIdleFunc(&idle);
+  glutIdleFunc(&render);
   glutTimerFunc(0,&timer,0);
   glutSpecialFunc(&keyboard);
   glViewport(0, 0, WIDTH, HEIGHT);
@@ -56,7 +56,7 @@ void Window::add(Object* object) {
 }
 
 void Window::render() {
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   float time = glutGet(GLUT_ELAPSED_TIME);
 
@@ -66,10 +66,9 @@ void Window::render() {
     object->draw();
   }
 
-  glFlush();
-}
+  glutSwapBuffers();
 
-void Window::idle() {
+  glFlush();
 }
 
 void Window::timer(int time) {

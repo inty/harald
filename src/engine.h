@@ -56,7 +56,6 @@ namespace Engine {
     private:
       // needs to be static so we can send a function pointer to glut.. :/
       static void render();
-      static void idle();
       static void timer(int time);
       static void keyboard(int key, int x, int y);
 
