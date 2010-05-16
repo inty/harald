@@ -53,32 +53,32 @@ void Object::setX(float x) {
 void Object::drawQuad(int w, int h) {
   glTranslatef(getX() + 0.0f, getY() + 0.0f, 0.0f);
   glBegin(GL_QUADS);
-    // Front Face
+    // Front
     glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.1f, -0.1f,  0.1f);
     glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.1f, -0.1f,  0.1f);
     glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.1f,  0.1f,  0.1f);
     glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.1f,  0.1f,  0.1f);
-    // Back Face
+    // Back
     glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.1f, -0.1f, -0.1f);
     glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.1f,  0.1f, -0.1f);
     glTexCoord2f(0.0f, 1.0f); glVertex3f( 0.1f,  0.1f, -0.1f);
     glTexCoord2f(0.0f, 0.0f); glVertex3f( 0.1f, -0.1f, -0.1f);
-    // Top Face
+    // Top
     glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.1f,  0.1f, -0.1f);
     glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.1f,  0.1f,  0.1f);
     glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.1f,  0.1f,  0.1f);
     glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.1f,  0.1f, -0.1f);
-    // Bottom Face
+    // Bottom
     glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.1f, -0.1f, -0.1f);
     glTexCoord2f(0.0f, 1.0f); glVertex3f( 0.1f, -0.1f, -0.1f);
     glTexCoord2f(0.0f, 0.0f); glVertex3f( 0.1f, -0.1f,  0.1f);
     glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.1f, -0.1f,  0.1f);
-    // Right face
+    // Right
     glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.1f, -0.1f, -0.1f);
     glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.1f,  0.1f, -0.1f);
     glTexCoord2f(0.0f, 1.0f); glVertex3f( 0.1f,  0.1f,  0.1f);
     glTexCoord2f(0.0f, 0.0f); glVertex3f( 0.1f, -0.1f,  0.1f);
-    // Left Face
+    // Left
     glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.1f, -0.1f, -0.1f);
     glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.1f, -0.1f,  0.1f);
     glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.1f,  0.1f,  0.1f);
@@ -94,16 +94,39 @@ Window::Window(int argc, char* argv[]) {
   glutInitWindowPosition(100,100);
   glutInitWindowSize(WIDTH, HEIGHT);
   glutCreateWindow(NAME);
+
+  // bind some callbacks
   glutDisplayFunc(&display);
   glutIdleFunc(&display);
   glutTimerFunc(0,&timer,0);
   glutKeyboardFunc(&keyboard);
   glutSpecialFunc(&specialKeyboard);
   glutReshapeFunc(&reshape);
+
+  // enable some features
   glEnable(GL_TEXTURE_2D);
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT1);
+
+  // clear screen
+  glClearColor(0.8f, 0.8f, 0.8f, 0.5f);
+  glClearDepth(1.0f);
+
+  glShadeModel(GL_SMOOTH);
+  glDepthFunc(GL_LEQUAL);
+
   glViewport(0, 0, WIDTH, HEIGHT);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+
+  // fancy lightning
+  GLfloat lightAmbient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+  GLfloat lightDiffuse[]= { 0.8f, 0.8f, 0.5f, 1.0f };
+  GLfloat lightPos[]= { 1.0f, 0.0f, 2.0f, 1.0f };
+  glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmbient);
+  glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiffuse);
+  glLightfv(GL_LIGHT1, GL_POSITION, lightPos);
 }
 
 void Window::reshape(int w, int h) {
@@ -142,7 +165,7 @@ void Window::display() {
   float time = glutGet(GLUT_ELAPSED_TIME);
 
   glLoadIdentity();
-  glRotatef(20.0f,1.0f,0.5f,0);
+  glRotatef(30.0f,1.0f,0.5f,0);
 
   for(ObjectList::const_iterator iter = objects.begin(),
     endIter = objects.end(); iter != endIter; ++iter) {
