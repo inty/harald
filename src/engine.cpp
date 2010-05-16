@@ -14,6 +14,53 @@ ObjectList Window::objects;
 
 Object::Object(Base* engine) {
   this->engine = engine;
+  x = 0;
+  y = 0;
+}
+
+void Object::addX(int x) {
+  Object::x += x;
+}
+
+void Object::addY(int y) {
+  Object::y += y;
+}
+
+void Object::subX(int x) {
+  Object::x -= x;
+}
+
+void Object::subY(int y) {
+  Object::y -= y;
+}
+
+int Object::getX() {
+  return x;
+}
+
+int Object::getY() {
+  return y;
+}
+
+void Object::setY(int y) {
+  Object::y = y;
+}
+
+void Object::setX(int x) {
+  Object::x = x;
+}
+
+void Object::drawQuad(int w, int h) {
+  glBegin(GL_QUADS);
+  glTexCoord2i(0, 0);
+  glVertex2i(getX(), getY());
+  glTexCoord2i(0, 1);
+  glVertex2i(getX(), getY() + h);
+  glTexCoord2i(1, 1);
+  glVertex2i(getX() + w, getY() + h);
+  glTexCoord2i(1, 0);
+  glVertex2i(getX() + w, getY());
+  glEnd();
 }
 
 // Window
