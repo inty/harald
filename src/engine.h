@@ -38,22 +38,22 @@ namespace Engine {
     protected:
       Base* engine;
 
-      void addX(int x);
-      void addY(int y);
-      void subX(int x);
-      void subY(int y);
+      void addX(float x);
+      void addY(float y);
+      void subX(float x);
+      void subY(float y);
 
-      int getX();
-      int getY();
+      float getX();
+      float getY();
 
-      void setX(int x);
-      void setY(int y);
+      void setX(float x);
+      void setY(float y);
 
       void drawQuad(int w, int h);
 
     private:
-      int x;
-      int y;
+      float x;
+      float y;
   };
 
   typedef list<Object*> ObjectList;

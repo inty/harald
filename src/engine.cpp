@@ -18,48 +18,71 @@ Object::Object(Base* engine) {
   y = 0;
 }
 
-void Object::addX(int x) {
+void Object::addX(float x) {
   Object::x += x;
 }
 
-void Object::addY(int y) {
+void Object::addY(float y) {
   Object::y += y;
 }
 
-void Object::subX(int x) {
+void Object::subX(float x) {
   Object::x -= x;
 }
 
-void Object::subY(int y) {
+void Object::subY(float y) {
   Object::y -= y;
 }
 
-int Object::getX() {
+float Object::getX() {
   return x;
 }
 
-int Object::getY() {
+float Object::getY() {
   return y;
 }
 
-void Object::setY(int y) {
+void Object::setY(float y) {
   Object::y = y;
 }
 
-void Object::setX(int x) {
+void Object::setX(float x) {
   Object::x = x;
 }
 
 void Object::drawQuad(int w, int h) {
+  glTranslatef(getX() + 0.0f, getY() + 0.0f, 0.0f);
   glBegin(GL_QUADS);
-  glTexCoord2i(0, 0);
-  glVertex2i(getX(), getY());
-  glTexCoord2i(0, 1);
-  glVertex2i(getX(), getY() + h);
-  glTexCoord2i(1, 1);
-  glVertex2i(getX() + w, getY() + h);
-  glTexCoord2i(1, 0);
-  glVertex2i(getX() + w, getY());
+    // Front Face
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.1f, -0.1f,  0.1f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.1f, -0.1f,  0.1f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.1f,  0.1f,  0.1f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.1f,  0.1f,  0.1f);
+    // Back Face
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.1f, -0.1f, -0.1f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.1f,  0.1f, -0.1f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f( 0.1f,  0.1f, -0.1f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f( 0.1f, -0.1f, -0.1f);
+    // Top Face
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.1f,  0.1f, -0.1f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.1f,  0.1f,  0.1f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.1f,  0.1f,  0.1f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.1f,  0.1f, -0.1f);
+    // Bottom Face
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.1f, -0.1f, -0.1f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f( 0.1f, -0.1f, -0.1f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f( 0.1f, -0.1f,  0.1f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.1f, -0.1f,  0.1f);
+    // Right face
+    glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.1f, -0.1f, -0.1f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.1f,  0.1f, -0.1f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f( 0.1f,  0.1f,  0.1f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f( 0.1f, -0.1f,  0.1f);
+    // Left Face
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.1f, -0.1f, -0.1f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.1f, -0.1f,  0.1f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.1f,  0.1f,  0.1f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.1f,  0.1f, -0.1f);
   glEnd();
 }
 
@@ -78,17 +101,15 @@ Window::Window(int argc, char* argv[]) {
   glutSpecialFunc(&specialKeyboard);
   glutReshapeFunc(&reshape);
   glEnable(GL_TEXTURE_2D);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(0.0, WIDTH, HEIGHT, 0.0, 0.0, 100.0);
   glViewport(0, 0, WIDTH, HEIGHT);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
 }
 
 void Window::reshape(int w, int h) {
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(0.0, w, h, 0.0, 0.0, 100.0);
   glViewport(0, 0, w, h);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
 }
 
 void Window::keyboard(unsigned char key, int x, int y) {
@@ -119,6 +140,9 @@ void Window::display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   float time = glutGet(GLUT_ELAPSED_TIME);
+
+  glLoadIdentity();
+  glRotatef(20.0f,1.0f,0.5f,0);
 
   for(ObjectList::const_iterator iter = objects.begin(),
     endIter = objects.end(); iter != endIter; ++iter) {

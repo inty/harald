@@ -20,16 +20,16 @@ void Player::draw() {
 void Player::key(int key) {
   switch(key) {
     case GLUT_KEY_UP:
-      subY(1);
+      addY(0.01f);
       break;
     case GLUT_KEY_DOWN:
-      addY(1);
+      subY(0.01f);
       break;
     case GLUT_KEY_LEFT:
-      subX(1);
+      subX(0.01f);
       break;
     case GLUT_KEY_RIGHT:
-      addX(1);
+      addX(0.01f);
       break;
   }
 }
@@ -38,8 +38,8 @@ void Player::key(int key) {
 
 Tree::Tree(Base* engine) : Object(engine) {
   texture = engine->loadImage("data/img/objects/tree.png");
-  setX(200);
-  setY(200);
+  setX(0.3f);
+  setY(0.3f);
 }
 
 void Tree::draw() {
