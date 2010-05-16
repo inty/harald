@@ -1,8 +1,5 @@
 #include "engine.h"
-#include "GL/glut.h"
-#include <IL/il.h>
 #include <iostream>
-#include <stdio.h>
 
 using namespace std;
 using namespace Engine;
@@ -12,6 +9,14 @@ const int Window::HEIGHT = 480;
 const char* Window::NAME = "harald";
 
 ObjectList Window::objects;
+
+// Object
+
+Object::Object(Base* engine) {
+  this->engine = engine;
+}
+
+// Window
 
 Window::Window(int argc, char* argv[]) {
   glutInit(&argc, argv);
@@ -72,6 +77,8 @@ void Window::timer(int time) {
   glutTimerFunc(1000/30,&timer,0);
 }
 
+// Base
+
 Base::Base(int argc, char* argv[]) {
   window = new Window(argc, argv);
 }
@@ -84,26 +91,61 @@ void Base::run() {
   window->run();
 }
 
-void Base::loadImage(char* filename) {
-  GLuint image;
-  ILuint texid;
-  ilInit();
-  ilGenImages(1, &texid);
-  ilBindImage(texid);
-  if (ilLoadImage(filename)) {
-    if (ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE)) {
-      glGenTextures(1, &image);
-      glBindTexture(GL_TEXTURE_2D, image);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ilGetInteger(IL_IMAGE_WIDTH),
-        ilGetInteger(IL_IMAGE_HEIGHT), 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE,
-        ilGetData());
+Texture* Base::loadImage(char* filename) {
+  if (textures[filename] == NULL) {
+    GLuint image;
+    ILuint texid;
+    ilInit();
+    ilGenImages(1, &texid);
+    ilBindImage(texid);
+    if (ilLoadImage(filename)) {
+      if (ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE)) {
+        glGenTextures(1, &image);
+        glBindTexture(GL_TEXTURE_2D, image);
+        textures[filename] = new Texture(ilGetInteger(IL_IMAGE_BPP), ilGetInteger(IL_IMAGE_WIDTH),
+          ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), ilGetData());
+      }
     }
   }
+  return textures[filename];
 }
 
-Object::Object(Base* engine) {
-  this->engine = engine;
+void Base::bindTexture(Texture* texture) {
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_2D, 0, texture->getInternalFormat(), texture->getWidth(),
+    texture->getHeight(), 0, texture->getFormat(), GL_UNSIGNED_BYTE,
+    texture->getData());
+}
+
+// Texture
+
+Texture::Texture(GLint internalFormat, GLsizei width, GLsizei height,
+    GLenum format, GLvoid* data) {
+  Texture::internalFormat = internalFormat;
+  Texture::width = width;
+  Texture::height = height;
+  Texture::format = format;
+  Texture::data = data;
+}
+
+GLint Texture::getInternalFormat() {
+  return internalFormat;
+}
+
+GLsizei Texture::getWidth() {
+  return width;
+}
+
+GLsizei Texture::getHeight() {
+  return height;
+}
+
+GLenum Texture::getFormat() {
+  return format;
+}
+
+GLvoid* Texture::getData() {
+  return data;
 }
 

@@ -1,15 +1,19 @@
 #include "game.h"
 #include "GL/glut.h"
+#include <IL/il.h>
+#include <iostream>
 
 using namespace Game;
 using namespace Engine;
 
-Player::Player(Base* engine) : Object(engine) {
+// PLAYER
 
+Player::Player(Base* engine) : Object(engine) {
+  texture = engine->loadImage("data/img/objects/player.png");
 }
 
 void Player::draw() {
-  engine->loadImage("data/img/objects/player.png");
+  engine->bindTexture(texture);
   glBegin(GL_QUADS);
   glTexCoord2i(0, 0);
   glVertex2i(0, 0);
@@ -37,5 +41,28 @@ void Player::key(int key) {
       glTranslatef(2.0f,0.0f,0.0f);
       break;
   }
+}
+
+// TREE
+
+Tree::Tree(Base* engine) : Object(engine) {
+  texture = engine->loadImage("data/img/objects/tree.png");
+}
+
+void Tree::draw() {
+  engine->bindTexture(texture);
+  glBegin(GL_QUADS);
+  glTexCoord2i(0, 0);
+  glVertex2i(200, 200);
+  glTexCoord2i(0, 1);
+  glVertex2i(200, 264);
+  glTexCoord2i(1, 1);
+  glVertex2i(264, 264);
+  glTexCoord2i(1, 0);
+  glVertex2i(264, 200);
+  glEnd();
+}
+
+void Tree::key(int key) {
 }
 

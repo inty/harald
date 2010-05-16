@@ -1,10 +1,32 @@
 #include <list>
+#include <map>
+#include "GL/glut.h"
+#include <IL/il.h>
 
 using namespace std;
 
 namespace Engine {
 
   class Base;
+
+  class Texture {
+    public:
+      Texture(GLint internalFormat, GLsizei width, GLsizei height,
+          GLenum format, GLvoid* data);
+
+      GLint getInternalFormat();
+      GLsizei getWidth();
+      GLsizei getHeight();
+      GLenum getFormat();
+      GLvoid* getData();
+
+    private:
+      GLint internalFormat;
+      GLsizei width;
+      GLsizei height;
+      GLenum format;
+      GLvoid* data;
+  };
 
   class Object {
     public:
@@ -18,6 +40,7 @@ namespace Engine {
   };
 
   typedef list<Object*> ObjectList;
+  typedef map<char*,Texture*> TextureMap;
 
   class Window {
     public:
@@ -47,10 +70,13 @@ namespace Engine {
       void run();
       void add(Object* object);
 
-      void loadImage(char* filename);
+      Texture* loadImage(char* filename);
+      void bindTexture(Texture* texture);
 
     private:
       Window* window;
-  };
 
+      TextureMap textures;
+  };
 }
+

@@ -10,6 +10,19 @@ namespace Game {
 
       void draw();
       void key(int key);
+
+    private:
+      Texture* texture;
   };
 
+  class Tree : public Object {
+    public:
+      Tree(Base* engine);
+
+      void draw();
+      void key(int key);
+
+    private:
+      Texture* texture;
+  };
 }
